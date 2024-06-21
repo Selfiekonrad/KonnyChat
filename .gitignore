@@ -1,0 +1,93 @@
+# .gitignore
+
+# General
+.DS_Store
+Thumbs.db
+
+# Backend (Spring Boot)
+backend/target/
+backend/*.log
+backend/*.tmp
+backend/.idea/
+backend/.vscode/
+backend/*.iml
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# Spring Boot specific
+backend/src/main/resources/application.properties
+backend/src/main/resources/application.yml
+backend/src/main/resources/application-*.properties
+backend/src/main/resources/application-*.yml
+
+# Frontend (Flutter)
+frontend/build/
+frontend/.dart_tool/
+frontend/.packages
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/flutter_export_environment.sh
+frontend/flutter_export_environment.bat
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.metadata
+frontend/.idea/
+frontend/.vscode/
+
+# Flutter specific
+frontend/pubspec.lock
+frontend/.packages
+frontend/ios/Flutter/Generated.xcconfig
+frontend/ios/Flutter/ephemeral
+frontend/ios/Flutter/App.framework
+frontend/ios/Flutter/Flutter.framework
+frontend/ios/.symlinks/
+frontend/ios/Pods/
+frontend/ios/Runner.xcworkspace/
+frontend/android/.gradle/
+frontend/android/app/build/
+frontend/android/local.properties
+frontend/android/.idea/
+
+# Build directories
+build/
+dist/
+
+# Logs
+*.log
+
+# System files
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# IntelliJ IDEA
+*.iml
+.idea/
+.idea_modules/
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# Mac OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+

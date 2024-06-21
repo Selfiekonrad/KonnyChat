@@ -1,3 +1,5 @@
+import 'dart:core';
+
 class Chat {
   int chatID;
   String name;
@@ -8,8 +10,8 @@ class Chat {
   });
 
   factory Chat.fromJson(Map<String, dynamic> json) => Chat(
-    chatID: json['chatID'],
-    name: json['name']
+    name: json['name'],
+    chatID: json['id']
   );
 
   static List<Chat> fromJsonList(List<dynamic> jsonList) {

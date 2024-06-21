@@ -1,5 +1,4 @@
 // get API Request
-
 import 'dart:convert';
 
 import '../models/chat_model.dart';
@@ -11,6 +10,7 @@ Future<List<Chat>> fetchChats() async {
 
   if (response.statusCode == 200) {
     List<dynamic> jsonList = json.decode(response.body);
+
     return Chat.fromJsonList(jsonList);
   } else {
     throw Exception('Failed to load chats');

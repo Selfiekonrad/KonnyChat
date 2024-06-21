@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Column _chatsOverview() {
+  Widget _chatsOverview() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -63,57 +63,70 @@ class _HomePageState extends State<HomePage> {
         ),
 
         SizedBox(
-          height: 450,
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: 8, // Change this to the number of items you want
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Column(
-                  children: [
-                    Container(
-                      constraints: const BoxConstraints(
-                        minHeight: 70,
-                        minWidth: double.infinity,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-                          children: [
-                            Text(
-                              'Name',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 8), // Spacer between texts
-                            Text(
-                              'Hi, do you want to meet today?',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
+          height: 400,
 
+          child:
+          FutureBuilder<List<Chat>>(
+            future: _chats,
+            builder: (context, snapshot) {
+
+            if (snapshot.connectionState == ConnectionState.waiting)
+            {return const Center( child: CircularProgressIndicator(),);
+            } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('no chats found'));
+            } else {
+
+              List<Chat> overViewChats = snapshot.data!;
+              return ListView.separated(
+                itemCount: overViewChats.length,
+                scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: double.infinity,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            overViewChats[index].name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8), // Spacer between texts
+                          const Text(
+                            'Hi, do you want to meet today?',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+
+                  );
+                },
+                separatorBuilder: (context, index) => const SizedBox(
+                    height: 25),
               );
-            },
+            }
+            }
           ),
-        ),
+        )
+
       ],
     );
   }

@@ -1,0 +1,47 @@
+# Database files
+*.h2.db
+*.mv.db
+
+# Sensitive configuration files
+application.properties
+application.yml
+
+# IntelliJ IDEA
+*.iml
+.idea/
+
+# Maven
+target/
+
+*.apk
+*.aab
+*.app
+
+# iOS
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Runner.xcworkspace/
+ios/Pods/
+
+# Android
+android/.gradle/
+android/local.properties
+
+# Flutter
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IntelliJ IDEA/Android Studio
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
@@ -28,70 +29,115 @@ class PizzaOrderWidget extends StatefulWidget {
 }
 
 class _PizzaOrderWidgetState extends State<PizzaOrderWidget> {
-  late PizzaOrderBloC _bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _bloc = PizzaOrderBloC();
-  }
-
-
   @override
   Widget build(BuildContext context) {
+    final bloc = PizzaOrderBloC();
+
     return Scaffold(
       body: Center(
-        child: StreamBuilder<PizzaOrderStatus>(
-          initialData: PizzaOrderStatus.none,
-        stream: _bloc.orderChanges,
-          builder: (context, streamSnapshot) {
+        child: FutureBuilder(
+          future: bloc.makeReadyForOrders(),
+          builder:
+              (BuildContext context, AsyncSnapshot<PizzaOrderStatus> snapshot) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Pizza-Service'),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                    onPressed: _bloc.onNewOrder,
-                    child: Text('Bestellung Aufgeben')),
-                const SizedBox(
-                  height: 16,
-                ),
-                Text('Bestellstatus: ${streamSnapshot.data}')
+                const Text('Pizze-Service'),
+                const SizedBox(height: 16),
+                Text('Bestellstatus: ${snapshot.data ?? 'bitte warten'}'),
+                //dragQueen()
+                draqableQueen()
               ],
             );
           },
-      )),
+        ),
+      ),
     );
   }
 
-  @override
-  void dispose() {
-    _bloc.dispose();
-    super.dispose();
+  Widget draqableQueen() {
+    int tosses = 0;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Draggable(
+            data: tosses,
+            child: Container(
+              color: Colors.black12,
+              height: 100,
+              width: 100,
+              child: Center(
+                child: Text('Ziehen'),
+              ),
+            ),
+            childWhenDragging: Container(
+              color: Colors.red,
+              height: 100,
+              width: 100,
+            ),
+            feedback: Container(
+              color: Colors.green,
+              height: 100,
+              width: 100,
+            )),
+        const SizedBox(height: 100),
+        DragTarget<int>(
+            onAcceptWithDetails: (data) => ++tosses,
+            onWillAcceptWithDetails: (tosses) => true,
+            builder: (context, candidateData, rejectData) {
+              return Container(
+                color: candidateData.isEmpty ? Colors.black12 : Colors.yellow,
+                height: 100,
+                width: 100,
+                child: Center(
+                  child: Text(tosses.toString()),
+                ),
+              );
+            })
+      ],
+    );
+  }
+
+  Widget dragQueen() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Über dismissable'),
+        Dismissible(
+          key: UniqueKey(),
+          child: Container(
+            height: 100,
+            width: double.infinity,
+            color: Colors.green,
+          ),
+          background: ColoredBox(
+            color: Colors.red,
+          ),
+          secondaryBackground: Container(
+            height: 20,
+            width: double.infinity,
+            color: Colors.amberAccent,
+          ),
+          confirmDismiss: (direction) async =>
+              direction == DismissDirection.endToStart,
+        ),
+        Text('Unter dem Dismissable')
+      ],
+    );
   }
 }
 
-enum PizzaOrderStatus { none, ordered, delivered }
+enum PizzaOrderStatus { none, ready, ordered, delivered }
 
 class PizzaOrderBloC {
-  final StreamController<PizzaOrderStatus> _orderStatusController = StreamController<PizzaOrderStatus>();
+  PizzaOrderStatus _currentStatus = PizzaOrderStatus.none;
 
-  Stream<PizzaOrderStatus> get orderChanges => _orderStatusController.stream;
+  PizzaOrderStatus get currentStatus => _currentStatus;
 
-  void onNewOrder() => _orderStatusController.sink.add(PizzaOrderStatus.ordered);
+  Future<PizzaOrderStatus> makeReadyForOrders() async {
+    await Future.delayed(Duration(seconds: 5));
+    _currentStatus = PizzaOrderStatus.ready;
 
-  void dispose() => _orderStatusController.close();
+    return _currentStatus;
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

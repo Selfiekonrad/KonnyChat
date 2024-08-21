@@ -19,11 +19,15 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    @GetMapping("/getUserIdFromName/{name}")
+    int getUserFromName(@PathVariable String name) {
+        return userRepository.findUserIdByName(name);
+    }
+
     @GetMapping("/without/{id}")
     Iterable<User> getUsersWithout(@PathVariable int id) {
         return userRepository.findAllWithout(id);
     }
-
 
     @GetMapping("/{id}")
     User getUser(@PathVariable int id) {
@@ -35,5 +39,8 @@ public class UserController {
         return userRepository.save(user);
     }
 
-
+    @GetMapping("/login/{name}/{password}")
+    boolean existsUserByNameAndPassword(@PathVariable String name, @PathVariable String password) {
+        return userRepository.existsUserByNameAndPassword(name, password);
+    }
 }

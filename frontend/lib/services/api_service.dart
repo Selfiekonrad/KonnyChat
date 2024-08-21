@@ -6,7 +6,7 @@ import '../models/user.dart';
 import '../models/message.dart';
 
 class ApiService {
-  final String _baseUrl = "192.168.0.13:8080";
+  final String _baseUrl = "192.168.0.30:8081";
 
   Future<User> fetchUserById(int id) async {
     var url = Uri.http(_baseUrl, '/users/$id');
@@ -65,4 +65,27 @@ class ApiService {
       throw Exception('failed to load all users inside Apiservice');
     }
   }
+
+  Future<bool> fetchLogin(String name, String password) async {
+    var url = Uri.http(_baseUrl, 'users/login/$name/$password');
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load login bool. status code: ${response.statusCode}');
+    }
+  }
+
+  Future<int> fetchIdFromUserName(String name) async {
+    var url = Uri.http(_baseUrl, 'users/getUserIdFromName/$name');
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load id from name. status code: ${response.statusCode}');
+    }
+  }
+
 }

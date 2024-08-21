@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/common/widgets/appbar/navigation_bar.dart';
 import 'package:frontend/inherited/user_info.dart';
 import 'package:frontend/pages/chats_overview/chats_overview_page.dart';
+import 'package:frontend/services/api_service.dart';
 
 class LoginMask extends StatefulWidget {
   const LoginMask({super.key});
@@ -12,11 +13,17 @@ class LoginMask extends StatefulWidget {
 }
 
 class _LoginMaskState extends State<LoginMask> {
+  late final ApiService _apiService;
   late TextEditingController _userTextController;
   late FocusNode _passwordFocusNode;
+  late String _password;
+  late String _username;
 
   @override
   void initState() {
+    _password = '';
+    _username = '';
+    _apiService = ApiService();
     _userTextController = TextEditingController();
     _passwordFocusNode = FocusNode();
     super.initState();
@@ -36,24 +43,10 @@ class _LoginMaskState extends State<LoginMask> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   logInForm(),
-                  const SizedBox(height: 24),
-                  registerForm()
                 ],
               ),
             ),
           )),
-    );
-  }
-
-  Widget registerForm() {
-    return Column(
-      children: [
-        usernameField(),
-        const SizedBox(height: 8),
-        passwordField(),
-        const SizedBox(height: 16),
-        registerButton()
-      ],
     );
   }
 
@@ -75,12 +68,8 @@ class _LoginMaskState extends State<LoginMask> {
       autofocus: true,
       clearButtonMode: OverlayVisibilityMode.editing,
       controller: _userTextController,
-      onChanged: (text) => print(text),
-      onEditingComplete: () => print('Bearbeitung beendet'),
-      onSubmitted: (text) {
-        print('Submitted: $text');
-        _passwordFocusNode.requestFocus();
-      },
+      onChanged: (text) => _username = text,
+      onSubmitted: (text) => _passwordFocusNode.requestFocus(),
     );
   }
 
@@ -89,28 +78,49 @@ class _LoginMaskState extends State<LoginMask> {
       placeholder: 'Passwort',
       clearButtonMode: OverlayVisibilityMode.editing,
       obscureText: true,
-      keyboardType: TextInputType.number,
+      onChanged: (text) => _password = text,
     );
   }
 
   CupertinoButton logInButton() {
     return CupertinoButton(
         child: const Text('Einloggen'),
-        onPressed: () {
-          _userTextController.selection = TextSelection(
-              baseOffset: 0, extentOffset: _userTextController.text.length);
-          Navigator.pushReplacement(
-              context,
-              CupertinoPageRoute(builder: (BuildContext context) => Userinfo(child: ChatsOverview(), userID: 2)));
+        onPressed: () async {
+          if ( await fetchLoginStatusBool(_username, _password) ) {
+            final userId = await fetchIdByName(_username);
+
+            if (userId != 0) {
+              print(userId);
+              UserinfoProvider.of(context)?.setUserID(userId);
+              Navigator.pushReplacement(
+                  context,
+                  CupertinoPageRoute(builder: (BuildContext context) => ChatsOverview()));
+            } else {
+              // TODO: DO WHEN USER 0
+            }
+          } else {
+           // TODO: DO WHEN FALSE PASSOWRD OR NO USER
+          }
         });
   }
 
-  CupertinoButton registerButton() {
-    return CupertinoButton(
-        child: const Text('Registieren'),
-        onPressed: () {
-          _userTextController.selection = TextSelection(
-              baseOffset: 0, extentOffset: _userTextController.text.length);
-        });
+  Future<bool> fetchLoginStatusBool(String name, String password) async {
+    try {
+      // Call the API to check login status
+      bool loginSuccess = await _apiService.fetchLogin(name, password);
+      return loginSuccess;
+    } catch (error) {
+      print('Error during login: $error');
+      return false;
+    }
+  }
+
+  Future<int> fetchIdByName(String name) async {
+    try {
+      return await _apiService.fetchIdFromUserName(name);
+    } catch (error) {
+        print('Error during login: $error');
+        return 0;
+    }
   }
 }

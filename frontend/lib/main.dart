@@ -26,20 +26,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [BlocProvider(create: (_) => ThemeCubit())],
-        child: BlocBuilder<ThemeCubit, ThemeMode>(
-          builder: (context, mode) => MaterialApp(
-              debugShowCheckedModeBanner: false,
-              initialRoute: '/',
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
-              themeMode: mode,
-              routes: {
-                '/h': (context) => ChatsOverview(),
-                '/': (context) => LoginMask(),
-                '/d': (context) => SplashPage()
-              }),
-        ));
+    return UserinfoProvider(
+      child: MultiBlocProvider(
+          providers: [BlocProvider(create: (_) => ThemeCubit())],
+          child: BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, mode) => MaterialApp(
+                debugShowCheckedModeBanner: false,
+                initialRoute: '/',
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: mode,
+                routes: {
+                  '/h': (context) => ChatsOverview(),
+                  '/': (context) => LoginMask(),
+                  '/d': (context) => SplashPage()
+                }),
+          )),
+    );
   }
 }

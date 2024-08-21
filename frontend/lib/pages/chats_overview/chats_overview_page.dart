@@ -73,6 +73,6 @@ class _ChatsOverviewState extends State<ChatsOverview> {
       throw Exception('Userinfo not found in context');
     }
     final localUserId = userInfo.userID;
-    return await apiService.fetchAllUsersWithoutPersonId(localUserId);
+    return await apiService.fetchAllUsersWithoutPersonId(localUserId!);
   }
 }

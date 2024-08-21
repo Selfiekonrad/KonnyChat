@@ -28,10 +28,15 @@ class _NewChatPageState extends State<NewChatPage> {
 
   @override
   void didChangeDependencies() {
-    apiService = ApiService();
-    localUserId = Userinfo.of(context)!.userID;
-    _listMessagesFuture = _loadUserInfo();
     super.didChangeDependencies();
+    apiService = ApiService();
+    localUserId = Userinfo.of(context)?.userID ?? -1;
+    if (localUserId == -1) {
+      // TODO: Handle the case where the userID was not properly set
+      print('Error: localUserId is not set.');
+    } else {
+      _listMessagesFuture = _loadUserInfo();
+    }
   }
 
   @override

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
-import '../chat/pages/new_chat_page.dart';
+import '../chat/pages/chat_page.dart';
 
 class SingleChatWidget extends StatelessWidget {
   final User user;
@@ -14,7 +14,7 @@ class SingleChatWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => NewChatPage(textingUser: user))),
+      onTap: () => Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => ChatPage(textingUser: user))),
       child: Stack(
         children: [
           chatBackground(),

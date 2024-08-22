@@ -86,11 +86,9 @@ class _LoginMaskState extends State<LoginMask> {
     return CupertinoButton(
         child: const Text('Einloggen'),
         onPressed: () async {
-          if ( await fetchLoginStatusBool(_username, _password) ) {
+          if (await fetchLoginStatusBool(_username, _password) ) {
             final userId = await fetchIdByName(_username);
-
             if (userId != 0) {
-              print(userId);
               UserinfoProvider.of(context)?.setUserID(userId);
               Navigator.pushReplacement(
                   context,
@@ -106,7 +104,6 @@ class _LoginMaskState extends State<LoginMask> {
 
   Future<bool> fetchLoginStatusBool(String name, String password) async {
     try {
-      // Call the API to check login status
       bool loginSuccess = await _apiService.fetchLogin(name, password);
       return loginSuccess;
     } catch (error) {

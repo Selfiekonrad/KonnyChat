@@ -66,8 +66,20 @@ class ApiService {
     }
   }
 
+  Stream<List<Message>> fetchAllMessagesFromChatIdAsStream(int chatId) async* {
+    while (true) {
+      try {
+        yield await fetchAllMessagesFromChatId(chatId);
+      } catch (e) {
+        print('Error fetching messages as Stream: $e');
+        yield [];
+      }
+      await Future.delayed(const Duration(seconds: 1));
+    }
+  }
+
   Future<bool> fetchLogin(String name, String password) async {
-    var url = Uri.http(_baseUrl, 'users/login/$name/$password');
+    var url = Uri.http(_baseUrl, '/users/login/$name/$password');
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -78,7 +90,7 @@ class ApiService {
   }
 
   Future<int> fetchIdFromUserName(String name) async {
-    var url = Uri.http(_baseUrl, 'users/getUserIdFromName/$name');
+    var url = Uri.http(_baseUrl, '/users/getUserIdFromName/$name');
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -86,6 +98,20 @@ class ApiService {
     } else {
       throw Exception('Failed to load id from name. status code: ${response.statusCode}');
     }
+  }
+
+  Future<int> postMessage(Map<String, dynamic> json) async {
+    var url = Uri.http(_baseUrl, '/messages');
+
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(json),
+    );
+
+    return response.statusCode;
   }
 
 }

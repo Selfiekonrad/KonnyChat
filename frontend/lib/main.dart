@@ -5,6 +5,7 @@ import 'package:frontend/core/configs/theme/app_theme.dart';
 import 'package:frontend/inherited/user_info.dart';
 import 'package:frontend/pages/chats_overview/chats_overview_page.dart';
 import 'package:frontend/pages/choose_mode/bloc/theme_cubit.dart';
+import 'package:frontend/pages/choose_mode/pages/choose_mode.dart';
 import 'package:frontend/pages/log_in/log_in.dart';
 import 'package:frontend/pages/splash/pages/splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -37,8 +38,8 @@ class MyApp extends StatelessWidget {
                 darkTheme: AppTheme.darkTheme,
                 themeMode: mode,
                 routes: {
-                  '/h': (context) => ChatsOverview(),
-                  '/': (context) => LoginMask(),
+                  '/d': (context) => ChatsOverview(),
+                  '/': (context) => ChooseModePage(),
                   '/d': (context) => SplashPage()
                 }),
           )),

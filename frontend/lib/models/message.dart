@@ -4,7 +4,7 @@ class Message {
   final int receiver;
   final int chatId;
   final String messageText;
-  final String timeSent;
+  late String timeSent;
 
   Message(
       {required this.id,
@@ -23,6 +23,7 @@ class Message {
         messageText: json['messageText'],
         timeSent: json['timeSent']);
   }
+
 }
 
 

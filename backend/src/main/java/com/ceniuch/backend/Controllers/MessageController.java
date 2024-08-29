@@ -4,6 +4,9 @@ import com.ceniuch.backend.Entities.Message;
 import com.ceniuch.backend.Repositories.MessageRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/messages")
 @CrossOrigin(origins = "*")
@@ -21,6 +24,7 @@ public class MessageController {
 
     @PostMapping()
     Message createMessage(@RequestBody Message message) {
+        message.setTimeSent(Timestamp.valueOf(LocalDateTime.now()));
         return messageRepository.save(message);
     }
 }

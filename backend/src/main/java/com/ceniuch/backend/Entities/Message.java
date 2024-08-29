@@ -1,6 +1,7 @@
 package com.ceniuch.backend.Entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 import java.sql.Timestamp;
@@ -51,5 +52,9 @@ public class Message {
 
     public Timestamp getTimeSent() {
         return timeSent;
+    }
+
+    public void setTimeSent(Timestamp timeSent) {
+        this.timeSent = timeSent;
     }
 }

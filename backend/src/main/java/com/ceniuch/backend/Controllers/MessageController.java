@@ -22,6 +22,11 @@ public class MessageController {
        return messageRepository.findAllByChatId(chatId);
     }
 
+    @GetMapping("/lastMessage/{chatId}")
+    Message getLastMessageByChatId(@PathVariable int chatId) {
+        return messageRepository.findTopByChatIdOrderByIdDesc(chatId);
+    }
+
     @PostMapping()
     Message createMessage(@RequestBody Message message) {
         message.setTimeSent(Timestamp.valueOf(LocalDateTime.now()));

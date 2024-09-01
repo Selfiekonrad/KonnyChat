@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 @Entity
 public class Chat {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     int personOne;
     int personTwo;
@@ -24,11 +23,23 @@ public class Chat {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getPersonOne() {
         return personOne;
     }
 
+    public void setPersonOne(int personOne) {
+        this.personOne = personOne;
+    }
+
     public int getPersonTwo() {
         return personTwo;
+    }
+
+    public void setPersonTwo(int personTwo) {
+        this.personTwo = personTwo;
     }
 }

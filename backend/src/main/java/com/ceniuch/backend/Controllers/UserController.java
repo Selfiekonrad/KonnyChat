@@ -24,6 +24,11 @@ public class UserController {
         return userRepository.findUserIdByName(name);
     }
 
+    @GetMapping("/allWithoutAChatFromUserId/{userId}")
+    Iterable<User> getAllWithoutAChatWithUserFromUserId(@PathVariable int userId) {
+        return userRepository.findAllWithoutAChatWithUser(userId);
+    }
+
     @GetMapping("/without/{id}")
     Iterable<User> getUsersWithout(@PathVariable int id) {
         return userRepository.findAllWithout(id);
